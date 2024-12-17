@@ -9,7 +9,7 @@ COPY . /docs
 
 RUN set -euxo pipefail \
   ; machine="$(uname -m)" \
-  ; deps="gcc musl-dev" \
+  ; deps="gcc musl-dev graphviz" \
   ; [[ "${machine}" != x86_64 ]] && \
       deps="${deps} cargo" \
   ; apk add --no-cache --virtual .build-deps ${deps} \
@@ -17,7 +17,8 @@ RUN set -euxo pipefail \
       mkdir -p /root/.cargo/registry/index && \
       git clone --bare https://github.com/rust-lang/crates.io-index.git /root/.cargo/registry/index/github.com-1285ae84e5963aae \
   ; pip3 install -r /requirements.txt \
-  ; mkdir -p /build/$VERSION \
+  ; mkdir -p /build/$VERSION/ \
+  ; dot -Tsvg /docs/mailu-network-diagram.dot -o /docs/contributors/mailu-network-diagram.svg \
   ; sphinx-build -W /docs /build/$VERSION \
   ; apk del .build-deps \
   ; rm -rf /root/.cargo
@@ -29,7 +30,7 @@ FROM nginx:1.25.5-alpine
 ARG version=master
 ARG pinned_version=master
 ENV VERSION=$version
-ENV TZ Etc/UTC
+ENV TZ=Etc/UTC
 LABEL version=$VERSION
 
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf

@@ -7,7 +7,7 @@
 <h1 align="center">Mailu-OIDC</h1>
 <p align="center">
   Multi-container mail server landscape<br />
-  featuring OpenID Connect authentication
+  featuring OpenID Connect authentication.
 </p>
 
 ---
@@ -24,8 +24,8 @@ Most of the documentation is available [below](#getting-started), and on the [Ma
 > [!NOTE]
 > This fork is extended by an OpenID Connect implementation to enable single
 > sign-on user session handling and authentication using OIDC providers. The
-> fork is maintained by [Heviat](https://heviat.com), a German cloud computing
-> company based in Potsdam. Feel free to contribute to this repository!
+> fork is maintained by [Heviat](https://heviat.com), a group of German-speaking software
+> developers excited about tech innovation. Feel free to contribute to this repository!
 
 ## Features
 
@@ -54,6 +54,11 @@ Main features include:
 4. Replace all `mailu` docker images with `heviat/mailu-oidc` in the `docker-compose.yml` file. See [details below](#replacing-docker-images).
 5. Add the [required OIDC environment variables](#setting-up-variables) to the `mailu.env` file
 6. Continue with the official setup guide [from here](https://mailu.io/2024.06/compose/setup.html#tls-certificates)
+
+> [!TIP]
+> We are currently working on our own configuration assistant to improve the
+> setup experience for `Mailu-OIDC`. You will also be able to use it for `Mailu`
+> without our OIDC implementation.
 
 ### Replacing Docker Images
 

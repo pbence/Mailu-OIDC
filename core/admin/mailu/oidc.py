@@ -26,6 +26,7 @@ from oic.oic.message import (
     UserInfoErrorResponse,
 )
 from oic.oauth2.grant import Token
+from urllib.parse import urlparse
 
 # [OIDC] Client class
 class OicClient:
@@ -38,7 +39,7 @@ class OicClient:
     registration_response: Optional[RegistrationResponse] = None
     enable_change_password_redirect: bool = True
     change_password_url: Optional[str] = None
-    redirect_url: Optional[str] = None
+    allowed_hostnames: list[str] = []
 
     def receive_provider_info(self):
         self.app.logger.info("[OIDC] Getting provider config..")
@@ -49,15 +50,15 @@ class OicClient:
             self.change_password_url = self.app.config["OIDC_CHANGE_PASSWORD_REDIRECT_URL"] or (
             self.client.issuer + "/.well-known/change-password"
             )
-            self.redirect_url = self.app.config["OIDC_REDIRECT_URL"] or (
-                "https://" + self.app.config["HOSTNAME"]
-            )
 
+            redirect_uris = [f"{hostname}/sso/login" for hostname in self.allowed_hostnames]
+    
             client_reg = RegistrationResponse(
                 client_id=self.app.config["OIDC_CLIENT_ID"],
                 client_secret=self.app.config["OIDC_CLIENT_SECRET"],
-                redirect_uris=[f"{self.redirect_url}/sso/login"],
+                redirect_uris=redirect_uris,
             )
+
             self.client.store_registration_info(client_reg)
             self.extension_client.store_registration_info(client_reg)
 
@@ -71,6 +72,7 @@ class OicClient:
         """Initialize OIDC client"""
 
         self.app = app
+        self.allowed_hostnames = [host.strip() for host in self.app.config['HOSTNAMES'].split(',')]
 
         settings = OicClientSettings(verify_ssl=app.config["OIDC_VERIFY_SSL"])
 
@@ -94,12 +96,19 @@ class OicClient:
         flask.session["state"] = rndstr()
         flask.session["nonce"] = rndstr()
 
+        redirect_uri = flask.request.host_url + "sso/login"
+
+        if self.app.config["OIDC_REDIRECT_URL"]:
+            redirect_uri = self.app.config["OIDC_REDIRECT_URL"]
+        elif flask.request.host not in self.allowed_hostnames:
+            return None
+
         args = {
             "client_id": self.client.client_id,
             "response_type": ["code"],
             "scope": ["openid", "email"],
             "nonce": flask.session["nonce"],
-            "redirect_uri": self.redirect_url + "/sso/login",
+            "redirect_uri": redirect_uri,
             "state": flask.session["state"],
         }
 

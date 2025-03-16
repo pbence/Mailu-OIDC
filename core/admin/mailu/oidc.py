@@ -13,20 +13,17 @@ from oic.utils.settings import OicClientSettings
 from oic import rndstr
 from oic.exception import MessageException, NotForMe
 from oic.oauth2.message import (
-    ROPCAccessTokenRequest,
     AccessTokenResponse,
     ErrorResponse,
 )
 from oic.oic.message import (
     AuthorizationResponse,
     RegistrationResponse,
-    EndSessionRequest,
     BackChannelLogoutRequest,
     OpenIDSchema,
     UserInfoErrorResponse,
 )
 from oic.oauth2.grant import Token
-from urllib.parse import urlparse
 
 # [OIDC] Client class
 class OicClient:

@@ -3,10 +3,10 @@ on:
   pull_request:
     branches:
       - master
-      - oidc
   push:
     branches:
       - '2024.06'
+      - master
   merge_group:
 
 concurrency: ci-multiarch-${{ github.ref }}

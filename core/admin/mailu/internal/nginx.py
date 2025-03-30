@@ -14,6 +14,7 @@ STATUSES = {
         "imap": "AUTHENTICATIONFAILED",
         "smtp": "535 5.7.8",
         "submission": "535 5.7.8",
+        "lmtp": "535 5.7.8",
         "pop3": "-ERR Authentication failed",
         "sieve": "AuthFailed"
     }),
@@ -21,6 +22,7 @@ STATUSES = {
         "imap": "PRIVACYREQUIRED",
         "smtp": "530 5.7.0",
         "submission": "530 5.7.0",
+        "lmtp": "530 5.7.0",
         "pop3": "-ERR Authentication canceled.",
         "sieve": "ENCRYPT-NEEDED"
     }),
@@ -28,6 +30,7 @@ STATUSES = {
         "imap": "LIMIT",
         "smtp": "451 4.3.2",
         "submission": "451 4.3.2",
+        "lmtp": "451 4.3.2",
         "pop3": "-ERR [LOGIN-DELAY] Retry later",
         "sieve": "AuthFailed"
     }),
@@ -102,13 +105,13 @@ def handle_authentication(headers):
             password = urllib.parse.unquote(headers["Auth-Pass"])
             ip = urllib.parse.unquote(headers["Client-Ip"])
         except:
-            app.logger.warn(f'Received undecodable user/password from front: {headers.get("Auth-User", "")!r}')
+            app.logger.warning(f'Received undecodable user/password from front: {headers.get("Auth-User", "")!r}')
         else:
             try:
                 user = models.User.query.get(user_email) if '@' in user_email else None
             except sqlalchemy.exc.StatementError as exc:
                 exc = str(exc).split('\n', 1)[0]
-                app.logger.warn(f'Invalid user {user_email!r}: {exc}')
+                app.logger.warning(f'Invalid user {user_email!r}: {exc}')
             else:
                 is_valid_user = user is not None
                 ip = urllib.parse.unquote(headers["Client-Ip"])

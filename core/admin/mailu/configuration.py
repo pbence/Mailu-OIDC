@@ -60,6 +60,7 @@ DEFAULT_CONFIG = {
     'OIDC_REDIRECT_URL': None,
     'OIDC_USERNAME_CLAIM': 'email',
     'OIDC_USER_DOMAIN': None,
+    'OIDC_ENABLE_USER_CREATION': True,
     # Mail settings
     'DMARC_RUA': None,
     'DMARC_RUF': None,

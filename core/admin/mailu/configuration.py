@@ -58,6 +58,8 @@ DEFAULT_CONFIG = {
     'OIDC_CHANGE_PASSWORD_REDIRECT_ENABLED': True,
     'OIDC_CHANGE_PASSWORD_REDIRECT_URL': None,
     'OIDC_REDIRECT_URL': None,
+    'OIDC_USERNAME_CLAIM': 'email',
+    'OIDC_USER_DOMAIN': None,
     # Mail settings
     'DMARC_RUA': None,
     'DMARC_RUF': None,

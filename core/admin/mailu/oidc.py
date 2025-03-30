@@ -197,11 +197,11 @@ class OicClient:
             raise PyoidcError("Error response in user info")
 
         return (
-            user_info_response["email"],
-            user_info_response["sub"],
-            token_response["id_token"],
-            token_response,
-        )
+                user_info_response[self.app.config.get('OIDC_USERNAME_CLAIM', 'email')],
+                user_info_response['sub'],
+                token_response["id_token"],
+                token_response
+            )
 
     def get_user_info(
         self, token: AccessTokenResponse

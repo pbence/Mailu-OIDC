@@ -54,7 +54,7 @@ def login():
                 return render_oidc_template(form, fields)
             
             if '@' not in username:
-                username = username + '@' + app.config.get('OIDC_USER_DOMAIN', app.config['DOMAIN'])
+                username = username + '@' + (app.config['OIDC_USER_DOMAIN'] or app.config['DOMAIN'])
 
             user = models.User.get(username)
             if user is None:

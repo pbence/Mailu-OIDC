@@ -215,8 +215,8 @@ jobs:
           PINNED_LABEL_VERSION: ${{ env.PINNED_MAILU_VERSION }}
           ARCH: linux/arm64/v8,linux/arm/v7
           BUILDER: ${{ steps.uuid.outputs.uuid }}
-          DOCKER_LOGIN: ${{ secrets.Docker_Login }}
-          DOCKER_PASSW: ${{ secrets.Docker_Password }}
+          DOCKER_LOGIN: ${{ secrets.DOCKER_LOGIN }}
+          DOCKER_PASSW: ${{ secrets.DOCKER_PASSWORD }}
           BUILDX_NO_DEFAULT_ATTESTATIONS: 1
         uses: nick-fields/retry@v3
         with:
@@ -293,8 +293,8 @@ jobs:
           PINNED_LABEL_VERSION: ${{ env.PINNED_MAILU_VERSION }}
           ARCH: 'linux/amd64'
           BUILDER: ${{ steps.uuid.outputs.uuid }}
-          DOCKER_LOGIN: ${{ secrets.Docker_Login }}
-          DOCKER_PASSW: ${{ secrets.Docker_Password }}
+          DOCKER_LOGIN: ${{ secrets.DOCKER_LOGIN }}
+          DOCKER_PASSW: ${{ secrets.DOCKER_PASSWORD }}
           BUILDX_NO_DEFAULT_ATTESTATIONS: 1
         uses: nick-fields/retry@v3
         with:
@@ -305,8 +305,8 @@ jobs:
           command: |
             set -euxo pipefail \
               ; /usr/bin/docker info \
-              ; echo "${{ github.token }}" |        docker login --username "${{ github.repository_owner }}" --password-stdin ghcr.io \
-              ; echo "$DOCKER_PASSW" |   docker login --username "$DOCKER_LOGIN" --password-stdin \
+              ; echo "${{ github.token }}" | docker login --username "${{ github.repository_owner }}" --password-stdin ghcr.io \
+              ; echo "$DOCKER_PASSW" | docker login --username "$DOCKER_LOGIN" --password-stdin \
               ; /usr/bin/docker buildx rm builder-${{ env.BUILDER }} \
               || echo "builder does not exist" \
               ; /usr/bin/docker buildx create --name builder-${{ env.BUILDER }} --driver docker-container --use \
@@ -370,8 +370,8 @@ jobs:
           PINNED_LABEL_VERSION: ${{ env.PINNED_MAILU_VERSION }}
           ARCH: linux/arm64/v8,linux/arm/v7
           BUILDER: ${{ steps.uuid.outputs.uuid }}
-          DOCKER_LOGIN: ${{ secrets.Docker_Login }}
-          DOCKER_PASSW: ${{ secrets.Docker_Password }}
+          DOCKER_LOGIN: ${{ secrets.DOCKER_LOGIN }}
+          DOCKER_PASSW: ${{ secrets.DOCKER_PASSWORD }}
           BUILDX_NO_DEFAULT_ATTESTATIONS: 1
         uses: nick-fields/retry@v3
         with:
